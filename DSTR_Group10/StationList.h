@@ -13,15 +13,18 @@ public:
 	StationNode* sortedRef;
 	int sizeOfList;
 
+	void displayList();
 	void insertFront(StationNode* new_node);
 	void insertEnd(StationNode* new_node);
-	void insertAfter(StationNode* targetNode, StationNode* new_node);
+	void insertAfter(int targetId, StationNode* new_node);
 	void editNextFare(StationNode* targetNode, float nextFare);
 	void editNextTravelTime(StationNode* targetNode, float nextTime);
 	void editStationName(StationNode* targetNode, string new_name);
 	float calculateDistance(int sourceId, int destinationId);
 	float calculateFare(int sourceId, int destinationId);
 	float calculateTime(int sourceId, int destinationId);
+
+	void serializeId();
 
 
 	StationNode* searchById(int id);

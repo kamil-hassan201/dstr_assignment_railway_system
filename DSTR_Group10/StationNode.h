@@ -18,7 +18,7 @@ class StationNode
 
 
 		// default constructor
-		StationNode(int id, string name, float nextFare, float nextTime, float nexDistance) {
+		StationNode(int id, string name, float nextFare, float nextTime, float nextDistance) {
 			this->id = id;
 			this->name = name;
 			this->nextFare = nextFare;

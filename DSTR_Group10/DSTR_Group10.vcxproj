@@ -134,6 +134,7 @@
     <ClCompile Include="StationNode.cpp" />
     <ClCompile Include="TicketList.cpp" />
     <ClCompile Include="TicketNode.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Customer.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="StationNode.h" />
     <ClInclude Include="TicketList.h" />
     <ClInclude Include="TicketNode.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

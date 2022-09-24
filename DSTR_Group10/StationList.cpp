@@ -1,5 +1,21 @@
 #include "StationList.h"
 
+void StationList::displayList()
+{
+	StationNode* current_node = head;
+
+	if (head == nullptr) {
+		cout << "The list is empty!!" << endl;
+	}
+
+	while (current_node != nullptr) {
+		
+		cout << "Id: " << current_node->id << "\t Name: " << current_node->name << endl;
+		current_node = current_node->next;
+	}
+
+}
+
 void StationList::insertFront(StationNode* new_node)
 {
 	if (head == nullptr) {
@@ -9,6 +25,7 @@ void StationList::insertFront(StationNode* new_node)
 		new_node->next = head;
 		head->prev = new_node;
 		head = new_node;
+		this->serializeId();
 	}
 	sizeOfList++;
 }
@@ -20,16 +37,23 @@ void StationList::insertEnd(StationNode* new_node)
 		head = tail = new_node;
 	}
 	else {
-		new_node->next = head;
-		head->prev = new_node;
-		head = new_node;
+		tail->next = new_node;
+		new_node->prev = tail;
+		tail = new_node;
 	}
 	sizeOfList++;
 }
 
 
-void StationList::insertAfter(StationNode* targetNode, StationNode * new_node)
+void StationList::insertAfter(int targetId, StationNode * new_node)
 {
+	StationNode* targetNode = searchById(targetId);
+	
+	if (targetNode == tail) {
+		this->insertEnd(new_node);
+		return;
+	}
+
 	new_node->prev = targetNode;
 	new_node->next = targetNode->next;
 	targetNode->next->prev = new_node;
@@ -37,6 +61,9 @@ void StationList::insertAfter(StationNode* targetNode, StationNode * new_node)
 	if(targetNode == tail) {
 		tail = new_node;
 	}
+
+	this->serializeId();
+
 	sizeOfList++;
 }
 
@@ -58,7 +85,7 @@ void StationList::editStationName(StationNode* targetNode, string new_name)
 StationNode* StationList::searchById(int id)
 {
 	StationNode* current_node = head;
-	while (current_node->id == id) {
+	while (current_node->id != id) {
 		current_node = current_node->next;
 	}
 	return current_node;
@@ -69,11 +96,18 @@ float StationList::calculateDistance(int sourceId, int destinationId)
 	StationNode* current_node = searchById(sourceId);
 	float totalDistance = 0;
 
-	while (current_node->id != destinationId) {
-		totalDistance += current_node->nextDistance;
-		current_node = current_node->next;
+	if (sourceId <= destinationId) {
+		while (current_node->id != destinationId) {
+			totalDistance += current_node->nextDistance;
+			current_node = current_node->next;
+		}
 	}
-
+	else {
+		while (current_node->id != destinationId) {
+			totalDistance += current_node->prev->nextDistance;
+			current_node = current_node->prev;
+		}
+	}
 	return totalDistance;
 }
 
@@ -82,9 +116,17 @@ float StationList::calculateFare(int sourceId, int destinationId)
 	StationNode* current_node = searchById(sourceId);
 	float totalFare = 0;
 
-	while (current_node->id != destinationId) {
-		totalFare += current_node->nextFare  ;
-		current_node = current_node->next;
+	if (sourceId <= destinationId) {
+		while (current_node->id != destinationId) {
+			totalFare += current_node->nextFare;
+			current_node = current_node->next;
+		}
+	}
+	else {
+		while (current_node->id != destinationId) {
+			totalFare += current_node->prev->nextFare;
+			current_node = current_node->prev;
+		}
 	}
 
 	return totalFare;
@@ -95,10 +137,29 @@ float StationList::calculateTime(int sourceId, int destinationId)
 	StationNode* current_node = searchById(sourceId);
 	float totalTime = 0;
 
-	while (current_node->id != destinationId) {
-		totalTime += current_node->nextTime;
+	if (sourceId <= destinationId) {
+		while (current_node->id != destinationId) {
+			totalTime += current_node->nextTime;
+			current_node = current_node->next;
+		}
+	}
+	else {
+		while (current_node->id != destinationId) {
+			totalTime += current_node->prev->nextTime;
+			current_node = current_node->prev;
+
+		}
+	}
+	return totalTime;
+}
+
+void StationList::serializeId()
+{
+	StationNode* current_node = head;
+	int count = 1;
+	while (current_node != nullptr) {
+		current_node->id = count;
+		count++;
 		current_node = current_node->next;
 	}
-
-	return totalTime;
 }
