@@ -137,7 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Customer.h" />
-    <ClInclude Include="CustomerStack.h" />
+    <ClInclude Include="CustomerList.h" />
     <ClInclude Include="StationList.h" />
     <ClInclude Include="StationNode.h" />
     <ClInclude Include="TicketList.h" />

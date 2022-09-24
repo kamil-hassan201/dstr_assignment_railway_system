@@ -7,10 +7,10 @@ using namespace std;
 
 class CustomerList
 {
-public:
-    Customer* head;
-    Customer* tail;
-    int sizeOfList;
+    public:
+        Customer* head;
+        Customer* tail;
+        int sizeOfList;
 
         // default constructor
         CustomerList() {

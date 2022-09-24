@@ -15,7 +15,16 @@ public:
 
 	void insertFront(StationNode* new_node);
 	void insertEnd(StationNode* new_node);
-	void insertAfter(StationNode* new_node);
+	void insertAfter(StationNode* targetNode, StationNode* new_node);
+	void editNextFare(StationNode* targetNode, float nextFare);
+	void editNextTravelTime(StationNode* targetNode, float nextTime);
+	void editStationName(StationNode* targetNode, string new_name);
+	float calculateDistance(int sourceId, int destinationId);
+	float calculateFare(int sourceId, int destinationId);
+	float calculateTime(int sourceId, int destinationId);
+
+
+	StationNode* searchById(int id);
 
 
 
@@ -27,4 +36,3 @@ public:
 		this->sortedRef = nullptr;
 	}
 };
-
