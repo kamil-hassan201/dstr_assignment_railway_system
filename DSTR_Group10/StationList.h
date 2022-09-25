@@ -13,9 +13,10 @@ public:
 	StationNode* sortedRef;
 	int sizeOfList;
 
-	void displayList();
+	void displatStations();
 	void insertFront(StationNode* new_node);
 	void insertEnd(StationNode* new_node);
+	void insertEndByAdmin(int id, string name, float prevFare, float prevTime, float prevDistance);
 	void insertAfter(int targetId, StationNode* new_node);
 	void editNextFare(StationNode* targetNode, float nextFare);
 	void editNextTravelTime(StationNode* targetNode, float nextTime);

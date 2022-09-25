@@ -12,6 +12,11 @@ class CustomerList
         Customer* tail;
         int sizeOfList;
 
+        // functions
+        void insert(Customer* new_node);
+        Customer* searchById(int id);
+
+
         // default constructor
         CustomerList() {
             this->head = nullptr;

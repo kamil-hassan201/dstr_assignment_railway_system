@@ -31,3 +31,25 @@ StationList* makeStationList()
 
     return sList;
 }
+
+void showLogin()
+{
+    cout << "1. Login as old customer" << endl;
+    cout << "1. Sign up as new customer" << endl;
+    cout << "1. Login as Admin" << endl;
+}
+
+CustomerList* createDefaultCustomerList()
+{
+    CustomerList* cList = new CustomerList();
+
+    Customer* first_customer = new Customer(cList->sizeOfList + 1, "Kamil Hassan", "A00092371", "1234");
+    cList->insert(first_customer);
+
+    Customer* second_customer = new Customer(cList->sizeOfList + 1, "Nishat Tonny", "B00072372", "4321");
+    cList->insert(second_customer);
+
+
+    return cList;
+}
+

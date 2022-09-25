@@ -1,6 +1,6 @@
 #include "StationList.h"
 
-void StationList::displayList()
+void StationList::displatStations()
 {
 	StationNode* current_node = head;
 
@@ -8,12 +8,12 @@ void StationList::displayList()
 		cout << "The list is empty!!" << endl;
 	}
 
-	while (current_node != nullptr) {
+	while (current_node->next != nullptr) {
 		
-		cout << "Id: " << current_node->id << "\t Name: " << current_node->name << endl;
+		cout << current_node->id << ". " << current_node->name << "  <-->  ";
 		current_node = current_node->next;
 	}
-
+	cout << current_node->id << ". " << current_node->name << endl;
 }
 
 void StationList::insertFront(StationNode* new_node)
@@ -41,6 +41,22 @@ void StationList::insertEnd(StationNode* new_node)
 		new_node->prev = tail;
 		tail = new_node;
 	}
+	sizeOfList++;
+}
+
+// not tested yet
+void StationList::insertEndByAdmin(int id, string name, float prevFare, float prevTime, float prevDistance)
+{
+	StationNode* new_node = new StationNode(id, name, NULL, NULL, NULL);
+
+	tail->nextFare = prevFare;
+	tail->nextTime = prevTime;
+	tail->nextDistance = prevDistance;
+
+	tail->next = new_node;
+	new_node->prev = tail;
+	tail = new_node;
+
 	sizeOfList++;
 }
 
