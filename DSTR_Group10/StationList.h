@@ -13,7 +13,7 @@ public:
 	StationNode* sortedRef;
 	int sizeOfList;
 
-	void displatStations();
+	void displaytStations();
 	void insertFront(StationNode* new_node);
 	void insertEnd(StationNode* new_node);
 	void insertEndByAdmin(int id, string name, float prevFare, float prevTime, float prevDistance);

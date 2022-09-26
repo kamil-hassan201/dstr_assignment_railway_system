@@ -1,19 +1,20 @@
 #include "StationList.h"
 
-void StationList::displatStations()
+void StationList::displaytStations()
 {
 	StationNode* current_node = head;
 
 	if (head == nullptr) {
 		cout << "The list is empty!!" << endl;
 	}
-
+	cout << endl << "\t \t Stations" << endl;
+	cout << "===========================================================" << endl;
 	while (current_node->next != nullptr) {
 		
 		cout << current_node->id << ". " << current_node->name << "  <-->  ";
 		current_node = current_node->next;
 	}
-	cout << current_node->id << ". " << current_node->name << endl;
+	cout << current_node->id << ". " << current_node->name << endl << endl;;
 }
 
 void StationList::insertFront(StationNode* new_node)
@@ -101,10 +102,15 @@ void StationList::editStationName(StationNode* targetNode, string new_name)
 StationNode* StationList::searchById(int id)
 {
 	StationNode* current_node = head;
-	while (current_node->id != id) {
+	int count = 0;
+	while (current_node->id != id && count != sizeOfList-1) {
 		current_node = current_node->next;
+		count++;
 	}
-	return current_node;
+	if (current_node->id == id) {
+		return current_node;
+	}
+	return NULL;
 }
 
 float StationList::calculateDistance(int sourceId, int destinationId)

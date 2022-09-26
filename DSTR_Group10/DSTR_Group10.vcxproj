@@ -128,7 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Customer.cpp" />
-    <ClCompile Include="CustomerList.cpp" />
+    <ClCompile Include="CustomerTree.cpp" />
     <ClCompile Include="DSTR_Group10.cpp" />
     <ClCompile Include="StationList.cpp" />
     <ClCompile Include="StationNode.cpp" />
@@ -138,7 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Customer.h" />
-    <ClInclude Include="CustomerList.h" />
+    <ClInclude Include="CustomerTree.h" />
     <ClInclude Include="StationList.h" />
     <ClInclude Include="StationNode.h" />
     <ClInclude Include="TicketList.h" />

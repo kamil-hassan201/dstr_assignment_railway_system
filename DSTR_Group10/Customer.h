@@ -10,7 +10,9 @@ public:
 	string name;
 	string identificationNumber;
 	string password;
-	Customer* next;
+	Customer* parent;
+	Customer* left;
+	Customer* right;
 
 	// default constructor
 	Customer(int id, string name, string identificationNumber, string password) {
@@ -18,6 +20,10 @@ public:
 		this->name = name;
 		this->identificationNumber = identificationNumber;
 		this->password = password;
-	}
+
+		this->parent = nullptr;
+		this->left = nullptr;
+		this->right = nullptr;
+	}						  
 };
 

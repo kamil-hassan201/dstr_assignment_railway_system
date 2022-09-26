@@ -1,7 +1,7 @@
 #include <iostream>
 #include "StationList.h"
 #include "StationNode.h"
-#include "CustomerList.h"
+#include "CustomerTree.h"
 #include "Customer.h"
 #include "utils.h"
 #include<limits> 
@@ -9,30 +9,34 @@
 int main()
 {
     StationList* sList = makeStationList();
-    CustomerList* cList = createDefaultCustomerList();
 
-    //sList->displayList();
+    CustomerTree* cTree = createDefaultCustomers();
 
     cout << "\t \t Railway System \t" << endl;
-    cout << "===========================================================" << endl;
+    cout << "===========================================================\n" << endl;
 
     int decision = 1;
 
-    while (decision == -1) {
+    while (decision != -1) {
         showLogin(); // show login options
 
         int loginDecision;
-        cout << "Enter your choice: ";
+        cout << endl << "Enter your choice: ";
         cin >> loginDecision;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch (loginDecision) {
         case 1:
-            // login customer
+             
+            if (loginCustomer(cTree)) {
+                customerOptions(sList);
+            }
+
             break;
-        
+
         case 2:
-            // create customer
+            signupCustomer(cTree);
+            customerOptions(sList);
             break;
         case 3:
             // login admin
@@ -41,9 +45,8 @@ int main()
             cout << "Invalid input!!" << endl;
             break;
 
+        }
     }
-
-    // sList->displatStations();
 
     return 0;
 }
