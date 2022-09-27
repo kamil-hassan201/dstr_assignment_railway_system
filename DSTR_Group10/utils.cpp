@@ -1,7 +1,14 @@
 #include "utils.h"
 #include<limits> 
 #include <string>
+#include "TicketList.h"
+#include <ctime>    
+#include <chrono>
+#include <iomanip>
+#include <sstream>
 
+
+#pragma warning(disable : 4996)
 
 using namespace std;
 
@@ -47,6 +54,8 @@ CustomerTree* createDefaultCustomers()
 {
     CustomerTree* cTree = new CustomerTree();
 
+    
+
     Customer * first = new Customer(10, "Kamil Hassan", "A00092371", "1234");
     cTree->insert(first);
 
@@ -62,6 +71,9 @@ CustomerTree* createDefaultCustomers()
     Customer* fifth = new Customer(12, "Joy Bangla", "B00072372", "4321");
     cTree->insert(fifth);
 
+    Customer* test = new Customer(1, "Kamil Hassan", "A00092371", "1");
+    cTree->insert(test);
+
     return cTree;
 }
 
@@ -71,7 +83,7 @@ int getRandomId()
     return randomId;
 }
 
-bool loginCustomer(CustomerTree *cTree) {
+int loginCustomer(CustomerTree *cTree) {
     int id;
     string password;
     cout << "Enter your id: ";
@@ -86,17 +98,17 @@ bool loginCustomer(CustomerTree *cTree) {
 
     if (node == NULL) {
         cout << "No such id found!!" << endl;
-        return false;
+        return NULL;
     }
     if (node->password != password) {
         cout << "Wrong Password!! " << endl;
-        return false;
+        return NULL;
     }
     cout << "Welcome Mr. " << node->name << endl << endl;
-    return true;
+    return id;
 }
 
-void signupCustomer(CustomerTree* cTree) {
+int signupCustomer(CustomerTree* cTree) {
     string password;
     string name;
     string identificationNum;
@@ -114,6 +126,7 @@ void signupCustomer(CustomerTree* cTree) {
 
     Customer* node = new Customer(id, name, identificationNum, password);
     cTree->insert(node);
+    return id;
 }
 
 void showStationDetails(StationNode* node) {
@@ -130,15 +143,23 @@ void showStationDetails(StationNode* node) {
 }
 
 void showStationDetailsBetween(StationList* sList, int choosenStation1, int choosenStation2) {
+    StationNode* cStation = sList->searchById(choosenStation1);
+    StationNode* dStation = sList->searchById(choosenStation2);
+
+    if (cStation == NULL || dStation == NULL) {
+        cout << "Invalid Station Id!!" << endl;
+        return;
+    }
+
     cout << "Station Details Between Cities: " << endl;
-    cout << "Travel Time:\t" << sList->calculateTime(choosenStation1, choosenStation2) << " min" << endl;
+    cout << "Travel Time:\t " << sList->calculateTime(choosenStation1, choosenStation2) << " min" << endl;
     cout << "Distance:\t " << sList->calculateDistance(choosenStation1, choosenStation2) << " KM" << endl;
-    cout << "Travel Fare:\t" << sList->calculateFare(choosenStation1, choosenStation2) << " RM" << endl;
+    cout << "Travel Fare:\t " << sList->calculateFare(choosenStation1, choosenStation2) << " RM" << endl;
     cout << endl;
 }
 
 
-void customerOptions(StationList* sList) {
+void customerOptions(StationList* sList, TicketList *tList, int customerId) {
     sList->displaytStations();
 
     while (true) {
@@ -166,7 +187,6 @@ void customerOptions(StationList* sList) {
                 }
                 else {
                     cout << "No such station!" << endl;
-
                 }
                 break; 
             }
@@ -183,7 +203,7 @@ void customerOptions(StationList* sList) {
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 
-                showStationDetailsBetween(sList, choosenStation1, choosenStation1);
+                showStationDetailsBetween(sList, choosenStation1, choosenStation2);
 
                 break;
             }
@@ -199,15 +219,36 @@ void customerOptions(StationList* sList) {
                 cin >> choosenStation2;
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                showStationDetailsBetween(sList, choosenStation1, choosenStation1);
+                StationNode* cStation = sList->searchById(choosenStation1);
+                StationNode* dStation = sList->searchById(choosenStation2);
+
+                if (cStation == NULL || dStation == NULL) {
+                    cout << "Invalid Station Id!!" << endl;
+                    break;
+                }
+                string departureTime = getDepartureTime(sList, choosenStation1, choosenStation2);
+                string arrivalTime = addTime(departureTime, sList->calculateTime(choosenStation1, choosenStation2));
                 
+                showStationDetailsBetween(sList, choosenStation1, choosenStation2);
+
+                cout << "Next LRT comming at: " << departureTime.substr(11) << endl;
+                cout << "Estimated Arrival at: " << arrivalTime.substr(11) << endl;
+
                 cout << endl << "Enter (1) to make the payment: ";
                 cin >> cChoice;
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                if (cChoice == 1) {
+                
+                if (cStation != NULL && dStation != NULL) {
+                    if (cChoice == 1) {
+                        string cDateTime = getDateTime();
 
+                        TicketNode* new_node = new TicketNode(tList->sizeOfList + 1, getRandomId(), cStation->name, dStation->name, cDateTime, departureTime, customerId);
+                        tList->insertEnd(new_node);
+                        showTicketDetails(new_node, arrivalTime);
+                    }
                 }
+                
 
                 break;
             }
@@ -219,3 +260,88 @@ void customerOptions(StationList* sList) {
     
 }
 
+void showTicketDetails(TicketNode* node, string arrivalTime) {
+    cout << "Ticket Details" << endl;
+    cout << "----------------" << endl;
+    cout << "Customer ID:\t " << node->customerId << endl;
+    cout << "Ticket ID:\t " << node->ticketId << endl;
+    cout << "Transaction ID:\t "<< node->transactionId <<   endl;
+    cout << "Purchase Time:\t" << node->transactionTime << endl;
+    cout << "Source Station:\t" << node->sourceStationName << endl;
+    cout << "Destination:\t" << node->targetStationName << endl;
+    cout << "Departure Time:\t" << node->departureTime.substr(11) << endl;
+    cout << "Arrival Time:\t" << arrivalTime.substr(11) << endl;
+    cout << "----------------" << endl;
+}
+
+// following code reference https://stackoverflow.com/questions/16357999/current-date-and-time-as-string
+
+string getDateTime() {
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+
+    std::ostringstream oss;
+
+    oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+
+    auto str = oss.str();
+    return str;
+}
+
+// following code reference https://stackoverflow.com/questions/16357999/current-date-and-time-as-string
+
+string addTime(string ct, float min) {
+    struct std::tm tm;
+    std::istringstream ss(ct);
+    ss >> std::get_time(&tm, "%d-%m-%Y %H-%M-%S"); 
+    std::time_t time = mktime(&tm) + (int) min * 60;
+
+    auto tm2 = *std::localtime(&time);
+
+    std::ostringstream oss;
+
+    oss << std::put_time(&tm2, "%d-%m-%Y %H-%M-%S");
+
+    auto str = oss.str();
+
+    return str;
+}
+
+// function to get next departure time
+string getDepartureTime(StationList* sList, int c_station, int d_station) {
+    string next_departure_from_root;
+    string departure_from_current;
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+    int d = tm.tm_mday;
+    int mn = tm.tm_mon + 1;
+    int y = tm.tm_year + 1900;
+    int h = tm.tm_hour;
+    int m = tm.tm_min;
+    int s = 00;
+    if (m <= 30) {
+        m = 30;
+    }
+    else {
+        m = 00;
+        h++;
+    }
+    if (h > 1 && h < 6) {
+        h = 6;
+    }
+    // next_departure time from root station
+    next_departure_from_root = "" + to_string(d) + "-" + to_string(mn) + "-" + to_string(y) + " " + to_string(h) + "-" + to_string(m) + "-" + to_string(s);
+    int time_duration;
+    if (c_station < d_station) {
+        time_duration = sList->calculateTime(1, c_station); // time to reach current station
+        departure_from_current = addTime(next_departure_from_root, time_duration); // departure time from current station
+
+    }
+    else {
+        time_duration = sList->calculateTime(sList->sizeOfList, c_station); // time to reach current station
+        cout << time_duration << endl;
+        departure_from_current = addTime(next_departure_from_root, time_duration); // departure time from current station
+    }
+    return departure_from_current;
+    
+}

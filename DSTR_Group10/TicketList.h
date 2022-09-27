@@ -11,16 +11,16 @@ class TicketList
 		TicketNode* head;
 		TicketNode* tail;
 		TicketNode* sortedRef;
-		int countOfTicket;
+		int sizeOfList;
 
-
+		void insertEnd(TicketNode* new_node);
 
 
 		// default constructor
 		TicketList() {
 			this->head = nullptr;
 			this->tail = nullptr;
-			this->countOfTicket = 0;
+			this->sizeOfList = 0;
 			this->sortedRef = nullptr;
 		}
 };
