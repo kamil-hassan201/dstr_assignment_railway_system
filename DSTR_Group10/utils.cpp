@@ -104,7 +104,7 @@ int loginCustomer(CustomerTree *cTree) {
         cout << "Wrong Password!! " << endl;
         return NULL;
     }
-    cout << "Welcome Mr. " << node->name << endl << endl;
+    cout << endl << "Welcome Mr. " << node->name << endl << endl;
     return id;
 }
 
@@ -151,7 +151,7 @@ void showStationDetailsBetween(StationList* sList, int choosenStation1, int choo
         return;
     }
 
-    cout << "Station Details Between Cities: " << endl;
+    cout << endl << "Station Details Between Cities: " << endl;
     cout << "Travel Time:\t " << sList->calculateTime(choosenStation1, choosenStation2) << " min" << endl;
     cout << "Distance:\t " << sList->calculateDistance(choosenStation1, choosenStation2) << " KM" << endl;
     cout << "Travel Fare:\t " << sList->calculateFare(choosenStation1, choosenStation2) << " RM" << endl;
@@ -226,9 +226,11 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
                     cout << "Invalid Station Id!!" << endl;
                     break;
                 }
+
                 string departureTime = getDepartureTime(sList, choosenStation1, choosenStation2);
+
                 string arrivalTime = addTime(departureTime, sList->calculateTime(choosenStation1, choosenStation2));
-                
+
                 showStationDetailsBetween(sList, choosenStation1, choosenStation2);
 
                 cout << "Next LRT comming at: " << departureTime.substr(11) << endl;
@@ -261,7 +263,8 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
 }
 
 void showTicketDetails(TicketNode* node, string arrivalTime) {
-    cout << "Ticket Details" << endl;
+    cout << "----------------" << endl;
+    cout << "Payment Completed!! Ticket Details" << endl;
     cout << "----------------" << endl;
     cout << "Customer ID:\t " << node->customerId << endl;
     cout << "Ticket ID:\t " << node->ticketId << endl;
@@ -329,11 +332,17 @@ string getDepartureTime(StationList* sList, int c_station, int d_station) {
     if (h > 1 && h < 6) {
         h = 6;
     }
+    if (h == 24) {
+        h = 00;
+    }
+
     // next_departure time from root station
     next_departure_from_root = "" + to_string(d) + "-" + to_string(mn) + "-" + to_string(y) + " " + to_string(h) + "-" + to_string(m) + "-" + to_string(s);
     int time_duration;
     if (c_station < d_station) {
+
         time_duration = sList->calculateTime(1, c_station); // time to reach current station
+
         departure_from_current = addTime(next_departure_from_root, time_duration); // departure time from current station
 
     }
