@@ -7,12 +7,16 @@
 #include "Customer.h"
 #include "utils.h"
 #include<limits> 
+#include "admin.h"
+
 
 int main()
 {
     StationList* sList = makeStationList();
     CustomerTree* cTree = createDefaultCustomers();
     TicketList* tList = new TicketList();
+    admin* admins;
+    admins = makeAdmins();
 
 
     cout << "\t \t Railway System \t" << endl;
@@ -30,9 +34,9 @@ int main()
         switch (loginDecision) {
         case 1:
         {
-            int customerId = loginCustomer(cTree);
+            int customerId = loginCustomer(cTree); // login old customer
             if (customerId != NULL) {
-                customerOptions(sList, tList, customerId);
+                customerOptions(sList, tList, customerId); // show customer options
             }
 
             break;
@@ -40,12 +44,18 @@ int main()
 
         case 2:
         {
-            int customerId = signupCustomer(cTree);
-            customerOptions(sList, tList, customerId);
+            int customerId = signupCustomer(cTree); // create new customer
+            customerOptions(sList, tList, customerId); // show customer options
             break;
         }
         case 3:
             // login admin
+            if (loginAdmin(admins)) {
+                adminOptions(sList, tList);
+            }
+            else {
+                cout << "Login unsuccessfull!" << endl;
+            }
             break;
         default:
             cout << "Invalid input!!" << endl;
@@ -53,6 +63,12 @@ int main()
 
         }
     }
+
+    // freeing up memory
+    delete cTree;
+    delete sList;
+    delete tList;
+    delete admins;
 
     return 0;
 }

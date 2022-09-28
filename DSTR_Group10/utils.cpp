@@ -6,6 +6,7 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <iostream>
 
 
 #pragma warning(disable : 4996)
@@ -45,6 +46,7 @@ StationList* makeStationList()
 
 void showLogin()
 {
+    cout << endl;
     cout << "1. Login as old customer" << endl;
     cout << "2. Sign up as new customer" << endl;
     cout << "3. Login as Admin" << endl;
@@ -104,7 +106,7 @@ int loginCustomer(CustomerTree *cTree) {
         cout << "Wrong Password!! " << endl;
         return NULL;
     }
-    cout << endl << "Welcome Mr. " << node->name << endl << endl;
+    cout << endl << "Welcome Mr. " << node->name << endl;
     return id;
 }
 
@@ -124,10 +126,33 @@ int signupCustomer(CustomerTree* cTree) {
     cout << "Enter your password: ";
     getline(cin, password); 
 
+    cout << "Welcome " << name << "! Your id is: " << id << endl;
+
     Customer* node = new Customer(id, name, identificationNum, password);
     cTree->insert(node);
     return id;
 }
+
+bool loginAdmin(admin admins[])
+{
+    int id;
+    string password;
+    cout << "Enter your id: ";
+
+    cin >> id; // read id
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    cout << "Enter your password: ";
+    getline(cin, password); // read pass
+
+
+    if (admins[id - 1].pass == password) {
+        return true;
+    }
+
+    return false;
+}
+
 
 void showStationDetails(StationNode* node) {
     cout << endl;
@@ -158,14 +183,282 @@ void showStationDetailsBetween(StationList* sList, int choosenStation1, int choo
     cout << endl;
 }
 
+void adminOptions(StationList* sList, TicketList* tList)
+{
+    while (true) {
+        cout << endl;
+        cout << "1. Add subway station" << endl;
+        cout << "2. Edit a subway station" << endl;
+        cout << "3. View all purchase transactions" << endl;
+        cout << "4. Sort purchases based on name" << endl;
+        cout << "5. Search specific customer ticket purchase information" << endl;
+        cout << "6. Edit specific ticket purchase information" << endl;
+        cout << "7. Delete specific customer ticket purchase information" << endl;
+        cout << "8. Log out" << endl;
+
+        int choice;
+        cout << endl << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        switch (choice) {
+        case 1: // add new station
+        {
+            int decision;
+            cout  << "1. Insert at the beginning" << endl;
+            cout  << "2. Insert at the end" << endl;
+            cout << "3. Insert after a sation" << endl;
+
+            cout << endl << "Enter your choice: ";
+            cin >> decision;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            // initialize station node variables
+            string stationName;
+            float nextFare;
+            float nextTime;
+            float nextDistance;
+
+            StationNode* new_node;
+
+
+            switch (decision) {
+            case 1: // insert at the front
+            {
+                cout << "Enter new name of station: ";
+                getline(cin, stationName);
+
+                cout  << "Enter fare (RM) to next station: ";
+                cin >> nextFare;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout  << "Enter time (min) to reach next station: ";
+                cin >> nextTime;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout  << "Enter distance (KM) to next station: ";
+                cin >> nextDistance;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                new_node = new StationNode(sList->sizeOfList + 1, stationName, nextFare, nextTime, nextDistance);
+                sList->insertFront(new_node);
+                cout << "Successfully added new station!" << endl;
+                break;
+            }
+            case 2: // insert at the end
+            {
+                cout << "Enter new name of station: ";
+                getline(cin, stationName);
+
+                cout  << "Enter fare (RM) to this station: ";
+                cin >> nextFare;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout  << "Enter time (min) to reach this station: ";
+                cin >> nextTime;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout  << "Enter distance (KM) from previous station: ";
+                cin >> nextDistance;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                sList->insertEndByAdmin(stationName, nextFare, nextTime, nextDistance);
+                cout << "Successfully added new station!" << endl;
+                break;
+            }
+            case 3:
+            {
+                int targetStationId;
+                cout << endl << "Enter id of station to insert after: ";
+                cin >> targetStationId;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                if (targetStationId == sList->sizeOfList) {
+                    cout << "Choose 2nd option to insert at the end" << endl;
+                    break;
+                }
+               
+
+                cout << "Enter new name of station: ";
+                getline(cin, stationName);
+
+                cout  << "Enter fare (RM) to next station: ";
+                cin >> nextFare;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout  << "Enter time (min) to reach next station: ";
+                cin >> nextTime;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout << "Enter distance (KM) to next station: ";
+                cin >> nextDistance;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                new_node = new StationNode(sList->sizeOfList + 1, stationName, nextFare, nextTime, nextDistance);
+                sList->insertAfter(targetStationId, new_node);
+                cout << "Successfully added new station!" << endl;
+                break;
+            }
+            default:
+                cout << "Invalid choice!" << endl;
+                break;
+            }
+
+
+            break;
+        }
+        case 2: // edit a subway station
+        {
+            sList->displaytStations();
+
+            int stationId;
+            cout << endl << "Enter Station id: ";
+            cin >> stationId;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            StationNode* editableStation = sList->searchById(stationId);
+
+            if (editableStation == NULL) {
+                cout << "No station with the id found!" << endl;
+            }
+
+            if (editableStation == NULL) {
+                cout << "No such station found!" << endl;
+                break;
+            }
+
+            float nextFare;
+            float nextTravelTime;
+            string stationName;
+
+            // reading new info
+            cout << "Enter new fare to next station: ";
+            cin >> nextFare;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout << "Enter new time to reach next staion: ";
+            cin >> nextTravelTime;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout << "Enter new name of station: ";
+            getline(cin, stationName);
+
+            editableStation->nextFare = nextFare;
+            editableStation->nextTime = nextTravelTime;
+            editableStation->name = stationName;
+            cout << "Edited successfully!" << endl;
+
+            break;
+        }
+        case 3:            // view all purchase transactions
+        {
+            int count = 0;
+            TicketNode* current_node = tList->head;
+            cout << "====================================================\n" << endl;
+
+            while (current_node != nullptr) {
+                showTicketDetails(current_node);
+                current_node = current_node->next;
+                count++;
+            }
+
+            if (count == 0) {
+                cout << "No ticket info found!" << endl;
+            }
+            cout << "====================================================\n" << endl;
+            break;
+        }
+
+        case 4:            // sort purchase based on name
+
+            break;
+
+        case 5:             // show specific customer info
+        {
+            int customerId;
+            cout << endl << "Enter Customer id: ";
+            cin >> customerId;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            showSpecificCustomerTicketInfo(tList, customerId);
+            break;
+        }
+        case 6:             // Edit specific customer ticket purchase information
+        {
+            int ticketId;
+            cout << endl << "Enter Ticket id: ";
+            cin >> ticketId;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            string transactionTime;
+            string departureTime;
+            string sourceStation;
+            string destinationStation;
+
+            TicketNode* editableNode = tList->searchByTicketId(ticketId);
+            if (editableNode == NULL) {
+                cout << "No such ticket id found!" << endl;
+                break;
+            }
+
+            // read new information
+            cout << "Enter ticket's transaction time: ";
+            getline(cin, transactionTime);
+
+            cout << "Enter ticket's departure time: ";
+            getline(cin, departureTime);
+
+            cout << "Enter ticket's source station name: ";
+            getline(cin, sourceStation);
+
+            cout << "Enter ticket's destination station name: ";
+            getline(cin, destinationStation);
+
+            // insert new information
+            editableNode->transactionTime = transactionTime;
+            editableNode->departureTime = departureTime;
+            editableNode->sourceStationName = sourceStation;
+            editableNode->targetStationName = destinationStation;
+
+            cout << endl << "Edited successfully" << endl;
+            break;
+        }
+
+        case 7: // delete ticket node
+        {
+            int deleteTicketId;
+            cout << endl << "Enter Ticket to delete! (-1 to go back): ";
+            cin >> deleteTicketId;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            if (deleteTicketId == -1) {
+                break;
+            }
+
+            else {
+                tList->deleteNodeByTicketId(deleteTicketId);
+            }
+
+            break;
+        }
+        case 8:
+            return;
+        default:
+            cout << "Invalid input!!" << endl;
+        }
+    }
+}
 
 void customerOptions(StationList* sList, TicketList *tList, int customerId) {
     sList->displaytStations();
 
     while (true) {
+        cout << "Customer Menu: " << endl;
         cout << "1. Search Station Details" << endl;
         cout << "2. View details between 2 cities" << endl;
         cout << "3. Make a purchase" << endl;
+        cout << "4. View purchase transaction history" << endl;
+        cout << "5. Delete purchase transaction" << endl;
+        cout << "6. Log out" << endl;
 
         int choice;
         cout << endl << "Enter your choice: ";
@@ -225,6 +518,9 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
                 if (cStation == NULL || dStation == NULL) {
                     cout << "Invalid Station Id!!" << endl;
                     break;
+                }if (cStation == dStation) {
+                    cout << "Current and Destination Station are same! Try again." << endl;
+                    break;
                 }
 
                 string departureTime = getDepartureTime(sList, choosenStation1, choosenStation2);
@@ -245,15 +541,42 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
                     if (cChoice == 1) {
                         string cDateTime = getDateTime();
 
-                        TicketNode* new_node = new TicketNode(tList->sizeOfList + 1, getRandomId(), cStation->name, dStation->name, cDateTime, departureTime, customerId);
-                        tList->insertEnd(new_node);
-                        showTicketDetails(new_node, arrivalTime);
+                        TicketNode* new_node = new TicketNode(tList->sizeOfList + 1, getRandomId(), cStation->name, dStation->name, cDateTime, departureTime, customerId, arrivalTime);
+                        tList->insertEnd(new_node); // insert into list
+                        cout << "Payment Completed!!" << endl;
+                        showTicketDetails(new_node); // show ticket details
                     }
                 }
                 
 
                 break;
             }
+            
+            case 4:
+            {
+                showSpecificCustomerTicketInfo(tList, customerId);
+                break;
+            }
+            case 5:
+            {
+                int deleteTicketId;
+                cout << endl << "Enter Ticket id you want to delete! (-1 to go back): ";
+                cin >> deleteTicketId;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                if (deleteTicketId == -1) {
+                    break;
+                }
+                else {
+                    tList->deleteNodeByTicketId(deleteTicketId);
+                }
+                
+                break;
+            }
+
+            case 6:
+                return;
+
             default:
                 cout << "Invalid Choice!" << endl;
                 break;
@@ -262,9 +585,9 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
     
 }
 
-void showTicketDetails(TicketNode* node, string arrivalTime) {
+void showTicketDetails(TicketNode* node) {
     cout << "----------------" << endl;
-    cout << "Payment Completed!! Ticket Details" << endl;
+    cout << "Ticket Details" << endl;
     cout << "----------------" << endl;
     cout << "Customer ID:\t " << node->customerId << endl;
     cout << "Ticket ID:\t " << node->ticketId << endl;
@@ -272,10 +595,38 @@ void showTicketDetails(TicketNode* node, string arrivalTime) {
     cout << "Purchase Time:\t" << node->transactionTime << endl;
     cout << "Source Station:\t" << node->sourceStationName << endl;
     cout << "Destination:\t" << node->targetStationName << endl;
-    cout << "Departure Time:\t" << node->departureTime.substr(11) << endl;
-    cout << "Arrival Time:\t" << arrivalTime.substr(11) << endl;
+    try {
+        cout << "Departure Time:\t" << node->departureTime.substr(11) << endl;
+        cout << "Arrival Time:\t" << node->estimatedArival.substr(11) << endl;
+    }
+    catch (exception) {
+        cout << "Not valid date" << endl;
+    }
+    
     cout << "----------------" << endl;
 }
+
+void showSpecificCustomerTicketInfo(TicketList *tList, int customerId) {
+    int count = 0;
+    TicketNode* current_node = tList->head;
+    cout << "====================================================\n" << endl;
+
+    while (current_node != nullptr) {
+        if (current_node->customerId == customerId) {
+            showTicketDetails(current_node);
+            count++;
+        }
+        current_node = current_node->next;
+
+    }
+    if (count == 0) {
+        cout << "No ticket info found!" << endl;
+    }
+    cout << "====================================================\n" << endl;
+
+    cout << endl;
+}
+
 
 // following code reference https://stackoverflow.com/questions/16357999/current-date-and-time-as-string
 

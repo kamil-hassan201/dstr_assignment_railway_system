@@ -16,7 +16,7 @@ public:
 	void displaytStations();
 	void insertFront(StationNode* new_node);
 	void insertEnd(StationNode* new_node);
-	void insertEndByAdmin(int id, string name, float prevFare, float prevTime, float prevDistance);
+	void insertEndByAdmin(string name, float prevFare, float prevTime, float prevDistance);
 	void insertAfter(int targetId, StationNode* new_node);
 	void editNextFare(StationNode* targetNode, float nextFare);
 	void editNextTravelTime(StationNode* targetNode, float nextTime);

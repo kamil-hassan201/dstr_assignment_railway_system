@@ -5,8 +5,7 @@
 #include "StationNode.h"
 #include "CustomerTree.h"
 #include "Customer.h"
-
-
+#include "admin.h"
 
 
 StationList* makeStationList();
@@ -21,4 +20,7 @@ string getDateTime();
 int loginCustomer(CustomerTree* cTree);
 string addTime(string ct, float min);
 string getDepartureTime(StationList* sList, int c_station, int d_station);
-void showTicketDetails(TicketNode* new_node,string arrivalTime);
+void showTicketDetails(TicketNode* new_node);
+bool loginAdmin(admin admins[]);
+void adminOptions(StationList* sList, TicketList* tList);
+void showSpecificCustomerTicketInfo(TicketList* tList, int customerId);

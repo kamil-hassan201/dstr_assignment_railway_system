@@ -14,7 +14,8 @@ class TicketList
 		int sizeOfList;
 
 		void insertEnd(TicketNode* new_node);
-
+		TicketNode* searchByTicketId(int ticketId);
+		void deleteNodeByTicketId(int ticketId);
 
 		// default constructor
 		TicketList() {

@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="admin.cpp" />
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="CustomerTree.cpp" />
     <ClCompile Include="DSTR_Group10.cpp" />
@@ -137,6 +138,7 @@
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="admin.h" />
     <ClInclude Include="Customer.h" />
     <ClInclude Include="CustomerTree.h" />
     <ClInclude Include="StationList.h" />

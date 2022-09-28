@@ -46,9 +46,9 @@ void StationList::insertEnd(StationNode* new_node)
 }
 
 // not tested yet
-void StationList::insertEndByAdmin(int id, string name, float prevFare, float prevTime, float prevDistance)
+void StationList::insertEndByAdmin(string name, float prevFare, float prevTime, float prevDistance)
 {
-	StationNode* new_node = new StationNode(id, name, NULL, NULL, NULL);
+	StationNode* new_node = new StationNode(sizeOfList+1, name, NULL, NULL, NULL);
 
 	tail->nextFare = prevFare;
 	tail->nextTime = prevTime;
