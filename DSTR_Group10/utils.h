@@ -13,7 +13,7 @@ void showLogin();
 CustomerTree* createDefaultCustomers();
 int getRandomId();
 int signupCustomer(CustomerTree* cTree);
-void customerOptions(StationList* sList, TicketList *tList, int customerId);
+void customerOptions(StationList* sList, TicketList *tList, int customerId, CustomerTree* cTree);
 void showStationDetailsBetween(StationList* sList, int choosenStation1, int choosenStation2);
 void showStationDetails(StationNode* node);
 string getDateTime();

@@ -50,6 +50,7 @@ void showLogin()
     cout << "1. Login as old customer" << endl;
     cout << "2. Sign up as new customer" << endl;
     cout << "3. Login as Admin" << endl;
+    cout << "4. Quit" << endl;
 }
 
 CustomerTree* createDefaultCustomers()
@@ -448,7 +449,7 @@ void adminOptions(StationList* sList, TicketList* tList)
     }
 }
 
-void customerOptions(StationList* sList, TicketList *tList, int customerId) {
+void customerOptions(StationList* sList, TicketList *tList, int customerId, CustomerTree *cTree) {
     sList->displaytStations();
 
     while (true) {
@@ -466,9 +467,9 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch (choice) {
-            case 1:
+            case 1:                // show details of 1 station
+
             {
-                // show details of 1 station
                 int choosenStation;
                 cout << endl << "Enter station number: ";
                 cin >> choosenStation;
@@ -483,9 +484,9 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
                 }
                 break; 
             }
-            case 2:
+            case 2:                // show details between 2 station
+
             {
-                // show details between 2 station
                 int choosenStation1, choosenStation2;
 
                 cout << endl << "Enter current station number: ";
@@ -501,10 +502,10 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
                 break;
             }
             
-            case 3:
-            { // make a purchase
+            case 3:         // make a purchase
+            { 
                 int choosenStation1, choosenStation2, cChoice;
-
+                string customerName = cTree->search(customerId)->name;
                 cout << endl << "Enter current station number: ";
                 cin >> choosenStation1;
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -541,7 +542,7 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId) {
                     if (cChoice == 1) {
                         string cDateTime = getDateTime();
 
-                        TicketNode* new_node = new TicketNode(tList->sizeOfList + 1, getRandomId(), cStation->name, dStation->name, cDateTime, departureTime, customerId, arrivalTime);
+                        TicketNode* new_node = new TicketNode(tList->sizeOfList + 1, getRandomId(), cStation->name, dStation->name, cDateTime, departureTime, customerId, customerName, arrivalTime);
                         tList->insertEnd(new_node); // insert into list
                         cout << "Payment Completed!!" << endl;
                         showTicketDetails(new_node); // show ticket details
@@ -590,6 +591,7 @@ void showTicketDetails(TicketNode* node) {
     cout << "Ticket Details" << endl;
     cout << "----------------" << endl;
     cout << "Customer ID:\t " << node->customerId << endl;
+    cout << "Customer Name:\t " << node->customerName << endl;
     cout << "Ticket ID:\t " << node->ticketId << endl;
     cout << "Transaction ID:\t "<< node->transactionId <<   endl;
     cout << "Purchase Time:\t" << node->transactionTime << endl;

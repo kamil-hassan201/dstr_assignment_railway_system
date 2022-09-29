@@ -36,7 +36,7 @@ int main()
         {
             int customerId = loginCustomer(cTree); // login old customer
             if (customerId != NULL) {
-                customerOptions(sList, tList, customerId); // show customer options
+                customerOptions(sList, tList, customerId, cTree); // show customer options
             }
 
             break;
@@ -45,7 +45,7 @@ int main()
         case 2:
         {
             int customerId = signupCustomer(cTree); // create new customer
-            customerOptions(sList, tList, customerId); // show customer options
+            customerOptions(sList, tList, customerId, cTree); // show customer options
             break;
         }
         case 3:
@@ -57,6 +57,9 @@ int main()
                 cout << "Login unsuccessfull!" << endl;
             }
             break;
+        case 4:
+            decision = -1;
+            break;
         default:
             cout << "Invalid input!!" << endl;
             break;
@@ -65,10 +68,10 @@ int main()
     }
 
     // freeing up memory
+
     delete cTree;
     delete sList;
     delete tList;
-    delete admins;
 
     return 0;
 }

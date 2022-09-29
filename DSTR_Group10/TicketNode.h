@@ -15,11 +15,12 @@ class TicketNode
 		string transactionTime;
 		string departureTime;
 		int customerId;
+		string customerName;
 		string estimatedArival;
 
 		// default constructor
 		TicketNode(int ticketId, int transactionId, string sourceStationName, string targetStationName , string transactionTime,
-			string departureTime, int customerId, string estimatedArival) {
+			string departureTime, int customerId, string customerName, string estimatedArival) {
 			this->ticketId = ticketId;
 			this->transactionId = transactionId;
 			this->sourceStationName = sourceStationName;
@@ -28,6 +29,7 @@ class TicketNode
 			this->departureTime = departureTime;
 			this->customerId = customerId;
 			this->estimatedArival = estimatedArival;
+			this->customerName = customerName;
 
 			this->next = nullptr;
 		}
