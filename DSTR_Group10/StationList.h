@@ -25,6 +25,7 @@ public:
 	float calculateFare(int sourceId, int destinationId);
 	float calculateTime(int sourceId, int destinationId);
 
+
 	void serializeId();
 
 

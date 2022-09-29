@@ -14,10 +14,11 @@ int main()
 {
     StationList* sList = makeStationList();
     CustomerTree* cTree = createDefaultCustomers();
-    TicketList* tList = new TicketList();
+    TicketList* tList = makeDefaultTicketList();
     admin* admins;
     admins = makeAdmins();
 
+  
 
     cout << "\t \t Railway System \t" << endl;
     cout << "===========================================================\n" << endl;

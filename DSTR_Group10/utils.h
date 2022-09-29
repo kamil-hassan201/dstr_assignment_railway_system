@@ -11,6 +11,7 @@
 StationList* makeStationList();
 void showLogin();
 CustomerTree* createDefaultCustomers();
+TicketList* makeDefaultTicketList();
 int getRandomId();
 int signupCustomer(CustomerTree* cTree);
 void customerOptions(StationList* sList, TicketList *tList, int customerId, CustomerTree* cTree);

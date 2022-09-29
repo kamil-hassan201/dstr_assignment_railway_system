@@ -17,6 +17,12 @@ class TicketList
 		TicketNode* searchByTicketId(int ticketId);
 		void deleteNodeByTicketId(int ticketId);
 
+		//sorting functions & utilities
+		void MergeSort(TicketNode ** headRef);
+		TicketNode* SortedMerge(TicketNode* a, TicketNode* b);
+		void FrontBackSplit(TicketNode* source, TicketNode** frontRef, TicketNode** backRef);
+
+
 		// default constructor
 		TicketList() {
 			this->head = nullptr;

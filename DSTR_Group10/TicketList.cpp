@@ -68,3 +68,72 @@ void TicketList::deleteNodeByTicketId(int ticketId)
 	cout << "Deleted successfully!" << endl;
 	return;
 }
+
+
+// for sorting, took help from https://www.geeksforgeeks.org/merge-sort-for-linked-list/
+
+void TicketList::MergeSort(TicketNode **headRef)
+{
+	TicketNode* head = *headRef;
+	TicketNode* a;
+	TicketNode* b;
+	/* Base case -- length 0 or 1 */
+	if ((head == nullptr) || (head->next == nullptr)) {
+		return;
+	}
+
+	/* Split head into 'a' and 'b' sublists */
+	FrontBackSplit(head, &a, &b);
+
+	/* Recursively sort the sublists */
+	MergeSort(&a);
+	MergeSort(&b);
+
+	/* answer = merge the two sorted lists together */
+	*headRef = SortedMerge(a, b);
+}
+
+TicketNode* TicketList::SortedMerge(TicketNode* a, TicketNode* b)
+{
+	TicketNode* result = NULL;
+
+	/* Base cases */
+	if (a == NULL)
+		return (b);
+	else if (b == NULL)
+		return (a);
+
+	/* Pick either a or b, and recur */
+	if (a->customerName.compare(b->customerName) < 0) {
+		result = a;
+		result->next = SortedMerge(a->next, b);
+	}
+	else {
+		result = b;
+		result->next = SortedMerge(a, b->next);
+	}
+	return (result);
+}
+
+void TicketList::FrontBackSplit(TicketNode* source, TicketNode** frontRef, TicketNode** backRef) // split list into 2 halves
+{
+	TicketNode* fast;
+	TicketNode* slow;
+	slow = source;
+	fast = source->next;
+
+	/* Advance 'fast' two nodes, and advance 'slow' one node */
+	while (fast != NULL) {
+		fast = fast->next;
+		if (fast != NULL) {
+			slow = slow->next;
+			fast = fast->next;
+		}
+	}
+
+	/* 'slow' is before the midpoint in the list, so split it in two
+	at that point. */
+	*frontRef = source;
+	*backRef = slow->next;
+	slow->next = NULL;
+}

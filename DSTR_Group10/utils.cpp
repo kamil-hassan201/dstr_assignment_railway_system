@@ -44,6 +44,21 @@ StationList* makeStationList()
     return sList;
 }
 
+TicketList* makeDefaultTicketList() {
+    TicketList* tList = new TicketList();
+
+    TicketNode* ticket1 = new TicketNode(tList->sizeOfList + 1, getRandomId(), "Titiwangsa", "Majlis Jamek", "23-08-2022 20-28-90", "23-08-2022 20-38-00", 15, "Hassan", "23-08-2022 21-28-90");
+    tList->insertEnd(ticket1);
+
+    TicketNode* ticket2 = new TicketNode(tList->sizeOfList + 1, getRandomId(), "Majlis Jamek", "Majlis Jamek", "23-08-2022 20-28-90", "23-08-2022 20-38-00", 11, "Abbas", "23-08-2022 21-28-90");
+    tList->insertEnd(ticket2);
+
+    TicketNode* ticket3 = new TicketNode(tList->sizeOfList + 1, getRandomId(), "PWTC", "Pudu", "23-08-2022 20-28-90", "23-08-2022 20-38-00", 13, "Eiber", "23-08-2022 21-28-90");
+    tList->insertEnd(ticket3);
+
+    return tList;
+}
+
 void showLogin()
 {
     cout << endl;
@@ -371,7 +386,8 @@ void adminOptions(StationList* sList, TicketList* tList)
         }
 
         case 4:            // sort purchase based on name
-
+            tList->MergeSort(&tList->head);
+            cout << "Sorted by customer name" << endl;
             break;
 
         case 5:             // show specific customer info
