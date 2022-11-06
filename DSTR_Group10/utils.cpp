@@ -104,9 +104,8 @@ int getRandomId()
 int loginCustomer(CustomerTree *cTree) {
     int id;
     string password;
-    cout << "Enter your id: ";
 
-    cin >> id; // read id
+    get_int(id, "Enter your id: ", "Your id doesn't match to our records!");
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     cout << "Enter your password: ";
@@ -153,9 +152,8 @@ bool loginAdmin(admin admins[])
 {
     int id;
     string password;
-    cout << "Enter your id: ";
 
-    cin >> id; // read id
+    get_int_between(id, 1, 3, "Enter your id: ", "Your id doesn't match to our records!");
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     cout << "Enter your password: ";
@@ -213,8 +211,7 @@ void adminOptions(StationList* sList, TicketList* tList)
         cout << "8. Log out" << endl;
 
         int choice;
-        cout << endl << "Enter your choice: ";
-        cin >> choice;
+        get_int_between(choice, 1, 8, "Enter your choice: ", "Invalid input!");
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch (choice) {
@@ -478,8 +475,8 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId, Cust
         cout << "6. Log out" << endl;
 
         int choice;
-        cout << endl << "Enter your choice: ";
-        cin >> choice;
+        get_int_between(choice, 1, 6, "Enter your choice: ", "Invalid input!");
+
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch (choice) {
@@ -522,11 +519,13 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId, Cust
             { 
                 int choosenStation1, choosenStation2, cChoice;
                 string customerName = cTree->search(customerId)->name;
-                cout << endl << "Enter current station number: ";
-                cin >> choosenStation1;
+                
+                get_int(choosenStation1, "Enter current station number: ", "Invalid station id!");
+
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << endl << "Enter destination station number: ";
-                cin >> choosenStation2;
+
+                get_int(choosenStation2, "Enter destination station number: ", "Invalid station id!");
+
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 StationNode* cStation = sList->searchById(choosenStation1);
@@ -549,8 +548,9 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId, Cust
                 cout << "Next LRT comming at: " << departureTime.substr(11) << endl;
                 cout << "Estimated Arrival at: " << arrivalTime.substr(11) << endl;
 
-                cout << endl << "Enter (1) to make the payment: ";
-                cin >> cChoice;
+
+                get_int(cChoice, "Enter (1) to make the payment: ", "Invalid input!");
+
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 
@@ -562,6 +562,9 @@ void customerOptions(StationList* sList, TicketList *tList, int customerId, Cust
                         tList->insertEnd(new_node); // insert into list
                         cout << "Payment Completed!!" << endl;
                         showTicketDetails(new_node); // show ticket details
+                    }
+                    else {
+                        cout << "Purchase unsuccessfull!" << endl;
                     }
                 }
                 
@@ -722,4 +725,41 @@ string getDepartureTime(StationList* sList, int c_station, int d_station) {
     }
     return departure_from_current;
     
+}
+
+
+// took help from https://stackoverflow.com/questions/15467412/c-cin-only-accept-numeric-values
+void get_int(int& d, std::string prompt, std::string fail)
+{
+    while (1) {
+
+        std::cout << prompt;
+        std::string str;
+        std::cin >> str;
+
+        std::istringstream ss(str);
+        int val1;
+        ss >> val1;
+
+        if (!ss.eof()) {
+            std::cout << fail << endl;;
+            continue;
+        }
+        else {
+            d = val1;
+            break;
+        }
+    }
+}
+
+void get_int_between(int& d, int min, int max, std::string prompt, std::string fail)
+{
+    while (1) {
+        get_int(d, prompt, fail);
+        if (d > max || d < min) {
+            std::cout << "Sorry, your choice is out of range.\n";
+            continue;
+        }
+        break;
+    }
 }

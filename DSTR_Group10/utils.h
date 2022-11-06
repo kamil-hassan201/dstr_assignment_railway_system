@@ -25,3 +25,5 @@ void showTicketDetails(TicketNode* new_node);
 bool loginAdmin(admin admins[]);
 void adminOptions(StationList* sList, TicketList* tList);
 void showSpecificCustomerTicketInfo(TicketList* tList, int customerId);
+void get_int(int& d, string prompt, string fail);
+void get_int_between(int& d, int min, int max, string prompt, string fail);

@@ -28,8 +28,8 @@ int main()
         showLogin(); // show login options
 
         int loginDecision;
-        cout << endl << "Enter your choice: ";
-        cin >> loginDecision;
+        cout << endl;
+        get_int_between(loginDecision, 1, 4, "Enter your choise: ", "Invalid Input!");
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch (loginDecision) {
