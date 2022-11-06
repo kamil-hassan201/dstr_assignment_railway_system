@@ -390,8 +390,8 @@ void adminOptions(StationList* sList, TicketList* tList)
         case 5:             // show specific customer info
         {
             int customerId;
-            cout << endl << "Enter Customer id: ";
-            cin >> customerId;
+            
+            get_int(customerId, "Enter Customer id: ", "Invalid id!");
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             showSpecificCustomerTicketInfo(tList, customerId);
             break;
